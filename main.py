@@ -1,21 +1,24 @@
-import logging, os
-from config import Config
-from core.keepalive import SmartKeepAlive
-from access.api import start_api
 
+import logging, sys, time
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    handlers=[logging.FileHandler(f"{Config.LOG_DIR}/node.log"), logging.StreamHandler()]
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[logging.FileHandler("antisol.log"), logging.StreamHandler()]
 )
 
 if __name__ == "__main__":
-    print(f"--- molab-node v{Config.VERSION} Starting ---")
+    from core.keepalive import AntiSleep
     
-    # 1. Start Smart Keep-Alive (Unified)
-    ka = SmartKeepAlive()
-    ka.start()
+    print(f"="="*50")
+    print(f"MAGoCo Anti-Sleep Core v{Config.VERSION}")
+    print(f"Molab | Adaptive Gaussian | GPU Heartbeat")
+    print(f"="="*50")
     
-    # 2. Start Access API (from Agent-Node-2/FreeNode)
-    print(f"API Server starting on port {Config.PORT}")
-    start_api()
+    as = AntiSleep()
+    as.start()
+    
+    # Keep main thread alive
+    while True:
+        time.sleep(60)
+        # Probabilistic heartbeat to kernel itself (obscurity)
+        logger.info("[MAGoCo] Active | Uptime %0.f mins", time.time() / 60)
